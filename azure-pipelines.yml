@@ -53,12 +53,7 @@ stages:
        }
       workingDirectory: WebApp
       displayName: 'PS : Add Project GUID'
-    - task: SonarCloudPrepare@1
-      displayName: Prepare analysis on SonarCloud
-      inputs:
-        SonarCloud: SonarCloud
-        organization: TestingXperts-POC
-        projectKey: WebAppWithDatabaseDemo
+    
 
     - task: DotNetCoreCLI@2
       displayName: Build
@@ -81,11 +76,9 @@ stages:
         arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
         zipAfterPublish: True
 
-    - task: SonarCloudAnalyze@1
-      displayName: Run Code Analysis
+  
 
-    - task: SonarCloudPublish@1
-      displayName: Publish Quality Gate Result
+    
 
     - task: PublishBuildArtifacts@1
       displayName: Publish Artifact (WebApp.zip)
@@ -262,7 +255,7 @@ stages:
       enabled: 'true'
       inputs:
         azureSubscription: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)'
-        appType: 'webApp'
+        appType: 'app'
         WebAppName: '$(WebAppName)'
         TakeAppOfflineFlag: true
         JSONFiles: '**/appsettings.json'
