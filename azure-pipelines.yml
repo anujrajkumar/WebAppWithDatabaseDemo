@@ -25,8 +25,8 @@ stages:
   - job: WebApp
     displayName: Build Web App Job
     pool:
-      name: Windows 
-      vmImage: 'windows-latest'
+      
+      vmImage: windows-latest
       demands: java
     variables:
       BuildConfiguration: release
@@ -89,8 +89,8 @@ stages:
   - job: Database
     displayName: Build Database Job
     pool:
-      name: Windows 
-      vmImage: 'windows-latest'
+      
+      vmImage: windows-latest
       demands: msbuild
 
     steps:
@@ -108,8 +108,8 @@ stages:
   - job: Selenium
     displayName: Build UI Tests Job
     pool:
-      name: Windows 
-      vmImage: 'windows-latest'
+      
+      vmImage: windows-latest
       demands: msbuild
 
     steps:
@@ -135,8 +135,8 @@ stages:
   - job: Infrastructure
     displayName: Publish Infra files Job
     pool:
-      name: Ubuntu
-      vmImage: 'ubuntu-latest'
+      
+      vmImage: ubuntu-latest
     steps:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Terraform'
@@ -156,8 +156,8 @@ stages:
   - job: Dev
     displayName: Deploy to Dev Job
     pool:
-      name: Windows 
-      vmImage: 'windows-latest'
+      
+      vmImage: windows-latest
     variables:
       Parameters.ConnectedServiceName: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)' # couldn't be referenced
       ResourceGroupName: '$(Prefix)-$(Release.EnvironmentName)-$(UniqueId)-RG'
