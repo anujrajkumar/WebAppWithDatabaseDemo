@@ -38,7 +38,7 @@ stages:
       displayName: Restore
       inputs:
         command: restore
-        projects: 'WebAppWithDatabaseDemo/WebApp/WebApp.csproj'
+        projects: 'WebApp/WebApp.csproj'
 
     - powershell: |
        Write-Host "Hello World"
@@ -61,7 +61,7 @@ stages:
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
-        projects: 'WebAppWithDatabaseDemo/WebApp/WebApp.csproj'
+        projects: 'WebApp/WebApp.csproj'
         arguments: '--configuration $(BuildConfiguration)'
 
     - task: DotNetCoreCLI@2
