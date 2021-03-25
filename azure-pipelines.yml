@@ -25,8 +25,8 @@ stages:
   - job: WebApp
     displayName: Build Web App Job
     pool:
-      name: Hosted Windows 2019 with VS2019 
-      vmImage: 'windows-2019'
+      name: Hosted Windows 
+      vmImage: 'windows-latest'
       demands: java
     variables:
       BuildConfiguration: release
@@ -35,7 +35,7 @@ stages:
       displayName: Restore
       inputs:
         command: restore
-        projects: '**/WebApp.csproj'
+        projects: '**WebApp.csproj'
 
     - powershell: |
        Write-Host "Hello World"
@@ -57,13 +57,13 @@ stages:
       displayName: Prepare analysis on SonarCloud
       inputs:
         SonarCloud: SonarCloud
-        organization: houssemdellai
+        organization: TestingXperts-POC
         projectKey: WebAppWithDatabaseDemo
 
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
-        projects: '**/WebApp.csproj'
+        projects: '**WebApp.csproj'
         arguments: '--configuration $(BuildConfiguration)'
 
     - task: DotNetCoreCLI@2
@@ -96,8 +96,8 @@ stages:
   - job: Database
     displayName: Build Database Job
     pool:
-      name: Hosted Windows 2019 with VS2019 
-      vmImage: 'windows-2019'
+      name: Hosted Windows 
+      vmImage: 'windows-latest'
       demands: msbuild
 
     steps:
@@ -115,8 +115,8 @@ stages:
   - job: Selenium
     displayName: Build UI Tests Job
     pool:
-      name: Hosted Windows 2019 with VS2019 
-      vmImage: 'windows-2019'
+      name: Hosted Windows 
+      vmImage: 'windows-latest'
       demands: msbuild
 
     steps:
@@ -142,8 +142,8 @@ stages:
   - job: Infrastructure
     displayName: Publish Infra files Job
     pool:
-      name: Hosted Ubuntu 1604
-      vmImage: 'ubuntu-16.04'
+      name: Hosted Ubuntu
+      vmImage: 'ubuntu-latest'
     steps:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Terraform'
@@ -163,12 +163,12 @@ stages:
   - job: Dev
     displayName: Deploy to Dev Job
     pool:
-      name: Hosted Windows 2019 with VS2019 
-      vmImage: 'windows-2019'
+      name: Hosted Windows 
+      vmImage: 'windows-latest'
     variables:
-      Parameters.ConnectedServiceName: 'Microsoft Azure Sponsorship (5a56fb34-f1c5-4669-9412-4592bb81a2cf)' # couldn't be referenced
+      Parameters.ConnectedServiceName: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)' # couldn't be referenced
       ResourceGroupName: '$(Prefix)-$(Release.EnvironmentName)-$(UniqueId)-RG'
-      Database.Admin: 'houssem'
+      Database.Admin: 'anuj'
       Database.Password: '@Aa123456'
       Database.Name: 'EmployeesDB'
       WebAppName: '$(Prefix)-$(Release.EnvironmentName)-$(UniqueId)'
@@ -193,7 +193,7 @@ stages:
         InstallTerraform: true
         UseAzureSub: true
         ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-        ConnectedServiceNameARM: 'Microsoft Azure Sponsorship (5a56fb34-f1c5-4669-9412-4592bb81a2cf)'
+        ConnectedServiceNameARM: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)'
         ManageState: false
 
     - task: Terraform@2
@@ -203,7 +203,7 @@ stages:
         InstallTerraform: true
         UseAzureSub: true
         ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-        ConnectedServiceNameARM: 'Microsoft Azure Sponsorship (5a56fb34-f1c5-4669-9412-4592bb81a2cf)'
+        ConnectedServiceNameARM: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)'
         ManageState: false
 
     - task: Terraform@2
@@ -213,35 +213,35 @@ stages:
         InstallTerraform: true
         UseAzureSub: true
         ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-        ConnectedServiceNameARM: 'Microsoft Azure Sponsorship (5a56fb34-f1c5-4669-9412-4592bb81a2cf)'
+        ConnectedServiceNameARM: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)'
         ManageState: false
 
     - task: AzureResourceGroupDeployment@2
       displayName: Validate ARM template
       enabled: 'false'
       inputs:
-        azureSubscription: 'Microsoft Azure Sponsorship (5a56fb34-f1c5-4669-9412-4592bb81a2cf)'
+        azureSubscription: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(ResourceGroupName)'
-        location: 'West Europe'
+        location: 'Central India'
         templateLocation: 'Linked artifact'
         csmFile: '$(System.DefaultWorkingDirectory)/**/arm/WebSiteSQLDatabase.json'
         csmParametersFile: '$(System.DefaultWorkingDirectory)/**/arm/WebSiteSQLDatabase.parameters.json'
-        overrideParameters: '-hostingPlanName "houssemdellai-service-plan" -skuName "F1" -skuCapacity 1 -administratorLogin $(Database.Admin) -administratorLoginPassword $(Database.Password) -databaseName $(Database.Name) -collation "SQL_Latin1_General_CP1_CI_AS" -edition "Basic" -maxSizeBytes "1073741824" -requestedServiceObjectiveName "Basic" -webSiteName $(WebAppName) -sqlserverName $(SqlServerName)'
+        overrideParameters: '-hostingPlanName "anuj-service-plan" -skuName "F1" -skuCapacity 1 -administratorLogin $(Database.Admin) -administratorLoginPassword $(Database.Password) -databaseName $(Database.Name) -collation "SQL_Latin1_General_CP1_CI_AS" -edition "Basic" -maxSizeBytes "1073741824" -requestedServiceObjectiveName "Basic" -webSiteName $(WebAppName) -sqlserverName $(SqlServerName)'
         deploymentMode: Validation
 
     - task: AzureResourceGroupDeployment@2
       displayName: Create Or Update Resource Group
       enabled: 'false'
       inputs:
-        azureSubscription: 'Microsoft Azure Sponsorship (5a56fb34-f1c5-4669-9412-4592bb81a2cf)'
+        azureSubscription: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(ResourceGroupName)'
-        location: 'West Europe'
+        location: 'Central India'
         templateLocation: 'Linked artifact'
         csmFile: '$(System.DefaultWorkingDirectory)/**/arm/WebSiteSQLDatabase.json'
         csmParametersFile: '$(System.DefaultWorkingDirectory)/**/arm/WebSiteSQLDatabase.parameters.json'
-        overrideParameters: '-hostingPlanName "houssemdellai-service-plan" -skuName "F1" -skuCapacity 1 -administratorLogin $(Database.Admin) -administratorLoginPassword $(Database.Password) -databaseName $(Database.Name) -collation "SQL_Latin1_General_CP1_CI_AS" -edition "Basic" -maxSizeBytes "1073741824" -requestedServiceObjectiveName "Basic" -webSiteName $(WebAppName) -sqlserverName $(SqlServerName)'
+        overrideParameters: '-hostingPlanName "anuj-service-plan" -skuName "F1" -skuCapacity 1 -administratorLogin $(Database.Admin) -administratorLoginPassword $(Database.Password) -databaseName $(Database.Name) -collation "SQL_Latin1_General_CP1_CI_AS" -edition "Basic" -maxSizeBytes "1073741824" -requestedServiceObjectiveName "Basic" -webSiteName $(WebAppName) -sqlserverName $(SqlServerName)'
         deploymentMode: Complete
 
     - task: DownloadBuildArtifacts@0    
@@ -261,7 +261,7 @@ stages:
       displayName: Deploy Web App to Azure App Service
       enabled: 'true'
       inputs:
-        azureSubscription: 'Microsoft Azure Sponsorship (5a56fb34-f1c5-4669-9412-4592bb81a2cf)'
+        azureSubscription: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)'
         appType: 'webApp'
         WebAppName: '$(WebAppName)'
         TakeAppOfflineFlag: true
@@ -282,7 +282,7 @@ stages:
     - task: SqlAzureDacpacDeployment@1
       displayName: Azure SQL Publish DacPac to SQL Azure
       inputs:
-        azureSubscription: 'Microsoft Azure Sponsorship (5a56fb34-f1c5-4669-9412-4592bb81a2cf)'
+        azureSubscription: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)'
         ServerName: '$(SqlServerName).database.windows.net,1433'
         DatabaseName: '$(Database.Name)'
         SqlUsername: '$(Database.Admin)'
