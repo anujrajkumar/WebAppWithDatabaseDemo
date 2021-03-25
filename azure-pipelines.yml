@@ -25,7 +25,7 @@ stages:
   - job: WebApp
     displayName: Build Web App Job
     pool:
-      name: Hosted Windows 
+      name: Windows 
       vmImage: 'windows-latest'
       demands: java
     variables:
@@ -89,7 +89,7 @@ stages:
   - job: Database
     displayName: Build Database Job
     pool:
-      name: Hosted Windows 
+      name: Windows 
       vmImage: 'windows-latest'
       demands: msbuild
 
@@ -108,7 +108,7 @@ stages:
   - job: Selenium
     displayName: Build UI Tests Job
     pool:
-      name: Hosted Windows 
+      name: Windows 
       vmImage: 'windows-latest'
       demands: msbuild
 
@@ -135,7 +135,7 @@ stages:
   - job: Infrastructure
     displayName: Publish Infra files Job
     pool:
-      name: Hosted Ubuntu
+      name: Ubuntu
       vmImage: 'ubuntu-latest'
     steps:
     - task: PublishBuildArtifacts@1
@@ -156,7 +156,7 @@ stages:
   - job: Dev
     displayName: Deploy to Dev Job
     pool:
-      name: Hosted Windows 
+      name: Windows 
       vmImage: 'windows-latest'
     variables:
       Parameters.ConnectedServiceName: 'Visual Studio Enterprise – MPN (da791a4e-3933-4213-a43e-f94f3e2187c3)' # couldn't be referenced
