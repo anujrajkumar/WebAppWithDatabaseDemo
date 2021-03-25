@@ -17,6 +17,9 @@ trigger:
      - README.md
      - azure-pipelines-ci.yml
      - azure-pipelines-ci-cd.yml
+     - azure-pipelines-cegid-demo.yml
+     - azure-pipelines-cegid.yml
+     - sonar-add-project-guid.ps1
 
 stages:
 - stage: Build_Stage
