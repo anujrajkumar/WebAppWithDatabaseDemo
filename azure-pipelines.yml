@@ -30,13 +30,6 @@ stages:
               arguments: '--configuration $(BuildConfiguration)'
               
           - task: DotNetCoreCLI@2
-            displayName: Test
-            inputs:
-              command: test
-              projects: '**/*UnitTest*.csproj'
-              arguments: '--configuration $(BuildConfiguration)'
-            
-          - task: DotNetCoreCLI@2
             displayName: Publish
             inputs: 
               command: 'publish'
