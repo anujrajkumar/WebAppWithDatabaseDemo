@@ -21,6 +21,37 @@ stages:
             inputs: 
               command: restore
               projects: 'WebApp/WebApp.csproj'
+          
+          - task: DotNetCoreCLI@2
+            displayName: Build
+            inputs:
+              command: build
+              projects: 'WebApp/WebApp.csproj'
+              arguments: '--configuration $(BuildConfiguration)'
+              
+          - task: DotNetCoreCLI@2
+            displayName: Test
+            inputs:
+              command: test
+              projects: '**/*UnitTest*.csproj'
+              arguments: '--configuration $(BuildConfiguration)'
+            
+          - task: DotNetCoreCLI@2
+            displayName: Publish
+            inputs: 
+              command: 'publish'
+              publishWebProjects: true
+              arguments: '''--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'''
+            
+          - task: PublishBuildArtifacts@1
+            displayName: WebApp.zip
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+            
+          
+
 
               
           
