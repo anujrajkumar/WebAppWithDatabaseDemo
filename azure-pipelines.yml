@@ -43,12 +43,7 @@ stages:
               publishWebProjects: true
               arguments: '''--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'''
             
-          - task: PublishBuildArtifacts@1
-            displayName: WebApp.zip
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
-              publishLocation: 'Container'
+              
             
           
 
